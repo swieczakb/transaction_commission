@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Amount;
 import pl.swieczakb.transaction_commission.transaction.domain.model.ClientId;
-import pl.swieczakb.transaction_commission.transaction.domain.model.OriginCurrency;
+import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionDate;
 
 public class DelegateTransactionRequest {
@@ -29,8 +29,8 @@ public class DelegateTransactionRequest {
     return Amount.of(amount);
   }
 
-  public OriginCurrency getCurrency() {
-    return OriginCurrency.of(currency);
+  public TransactionCurrency getCurrency() {
+    return TransactionCurrency.of(currency);
   }
 
   public ClientId getClientId() {

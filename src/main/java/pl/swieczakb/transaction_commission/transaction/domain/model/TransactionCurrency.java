@@ -1,17 +1,18 @@
 package pl.swieczakb.transaction_commission.transaction.domain.model;
 
 import java.util.Currency;
+import pl.swieczakb.transaction_commission.transaction.domain.model.exception.ValidationException;
 
-public class OriginCurrency {
+public class TransactionCurrency {
 
   private final Currency currency;
 
-  public OriginCurrency(Currency currency) {
+  public TransactionCurrency(Currency currency) {
     this.currency = currency;
   }
 
-  public static OriginCurrency of(String currency) {
-    return new OriginCurrency(Currency.getInstance(currency));
+  public static TransactionCurrency of(String currency) {
+    return new TransactionCurrency(Currency.getInstance(currency));
   }
 
   public void validate() throws ValidationException {

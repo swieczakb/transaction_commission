@@ -3,6 +3,7 @@ package pl.swieczakb.transaction_commission.transaction.domain.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
+import pl.swieczakb.transaction_commission.transaction.domain.model.exception.ValidationException;
 
 public class Amount implements Comparable<Amount> {
 

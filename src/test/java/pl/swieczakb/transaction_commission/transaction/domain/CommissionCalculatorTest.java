@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Amount;
 import pl.swieczakb.transaction_commission.transaction.domain.model.ClientId;
-import pl.swieczakb.transaction_commission.transaction.domain.model.OriginCurrency;
+import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Transaction;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCommission;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionDate;
@@ -42,7 +42,7 @@ class CommissionCalculatorTest {
     final ClientId givenClientId = ClientId.of(1L);
     final TransactionDate givenTransactionDate = TransactionDate.of(LocalDate.now());
     final Transaction givenTransaction = new Transaction(givenTransactionDate,
-        Amount.of(BigDecimal.valueOf(500)), OriginCurrency.of("EUR"), givenClientId);
+        Amount.of(BigDecimal.valueOf(500)), TransactionCurrency.of("EUR"), givenClientId);
     when(transactionRepository.hasClientHighTurnoverDiscount(givenClientId,
         givenTransactionDate)).thenReturn(false);
     when(clientService.isSpecialClient(givenClientId)).thenReturn(false);
@@ -60,7 +60,7 @@ class CommissionCalculatorTest {
     final ClientId givenClientId = ClientId.of(1L);
     final TransactionDate givenTransactionDate = TransactionDate.of(LocalDate.now());
     final Transaction givenTransaction = new Transaction(givenTransactionDate,
-        Amount.of(BigDecimal.valueOf(500)), OriginCurrency.of("EUR"), givenClientId);
+        Amount.of(BigDecimal.valueOf(500)), TransactionCurrency.of("EUR"), givenClientId);
     when(transactionRepository.hasClientHighTurnoverDiscount(givenClientId,
         givenTransactionDate)).thenReturn(true);
 
@@ -77,7 +77,7 @@ class CommissionCalculatorTest {
     final ClientId givenClientId = ClientId.of(1L);
     final TransactionDate givenTransactionDate = TransactionDate.of(LocalDate.now());
     final Transaction givenTransaction = new Transaction(givenTransactionDate,
-        Amount.of(BigDecimal.valueOf(500)), OriginCurrency.of("EUR"), givenClientId);
+        Amount.of(BigDecimal.valueOf(500)), TransactionCurrency.of("EUR"), givenClientId);
     when(transactionRepository.hasClientHighTurnoverDiscount(givenClientId,
         givenTransactionDate)).thenReturn(false);
     when(clientService.isSpecialClient(givenClientId)).thenReturn(true);

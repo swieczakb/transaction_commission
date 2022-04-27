@@ -1,18 +1,19 @@
 package pl.swieczakb.transaction_commission.transaction.domain.model;
 
+import pl.swieczakb.transaction_commission.transaction.domain.model.exception.ValidationException;
 import pl.swieczakb.transaction_commission.transaction.domain.port.ClientRepository;
 
 public class Transaction {
 
   private final TransactionDate date;
   private final Amount amount;
-  private final OriginCurrency currency;
+  private final TransactionCurrency currency;
   private final ClientId clientId;
 
   public Transaction(
       TransactionDate date,
       Amount amount,
-      OriginCurrency currency,
+      TransactionCurrency currency,
       ClientId clientId) {
     this.date = date;
     this.amount = amount;
@@ -21,7 +22,7 @@ public class Transaction {
   }
 
   public static Transaction of(TransactionDate transactionDate, Amount amount,
-      OriginCurrency currency, ClientId clientId) {
+      TransactionCurrency currency, ClientId clientId) {
     return new Transaction(transactionDate, amount, currency, clientId);
   }
 
@@ -40,7 +41,7 @@ public class Transaction {
     return amount;
   }
 
-  public OriginCurrency getCurrency() {
+  public TransactionCurrency getCurrency() {
     return currency;
   }
 

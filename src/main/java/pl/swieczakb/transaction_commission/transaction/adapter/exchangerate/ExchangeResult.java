@@ -3,9 +3,10 @@ package pl.swieczakb.transaction_commission.transaction.adapter.exchangerate;
 import java.math.BigDecimal;
 import java.util.Currency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Amount;
-import pl.swieczakb.transaction_commission.transaction.domain.model.ExchangeCurrency;
+import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCurrency;
 
 public class ExchangeResult {
+
   private final BigDecimal amount;
   private final Currency currency;
 
@@ -22,7 +23,7 @@ public class ExchangeResult {
     return Amount.of(amount);
   }
 
-  public ExchangeCurrency getCurrency() {
-    return ExchangeCurrency.of(currency);
+  public TransactionCurrency getCurrency() {
+    return TransactionCurrency.of(currency.getCurrencyCode());
   }
 }

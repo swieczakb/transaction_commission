@@ -3,7 +3,6 @@ package pl.swieczakb.transaction_commission.transaction.domain.port;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -22,15 +21,15 @@ import pl.swieczakb.transaction_commission.transaction.adapter.transactiondb.Fak
 import pl.swieczakb.transaction_commission.transaction.domain.CommissionCalculator;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Amount;
 import pl.swieczakb.transaction_commission.transaction.domain.model.ClientId;
-import pl.swieczakb.transaction_commission.transaction.domain.model.ExchangeCurrency;
-import pl.swieczakb.transaction_commission.transaction.domain.model.OriginCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Transaction;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCommission;
+import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionDate;
 
 class TransactionServiceTest {
 
-  private final ObjectMapper OBJECT_MAPPER = new ObjectMapper().registerModule(new JavaTimeModule());
+  private final ObjectMapper OBJECT_MAPPER = new ObjectMapper().registerModule(
+      new JavaTimeModule());
   private TransactionRepository transactionRepository;
   private ExchangeRateService exchangeRateService;
   private CommissionCalculator commissionCalculator;
@@ -54,7 +53,7 @@ class TransactionServiceTest {
   void shouldPropagateTransactionForSpecialClient() throws DomainException {
     //given
     final Transaction transaction = Transaction.of(TransactionDate.of(LocalDate.of(2020, 4, 1)),
-        Amount.of(new BigDecimal("100.00")), OriginCurrency.of("EUR"), ClientId.of(42L));
+        Amount.of(new BigDecimal("100.00")), TransactionCurrency.of("EUR"), ClientId.of(42L));
 
     //when
     final TransactionCommission result = transactionService.propagateTransaction(transaction);
@@ -68,7 +67,7 @@ class TransactionServiceTest {
   void shouldPropagateTransactionWithNormalPrice() throws DomainException {
     //given
     final Transaction transaction = Transaction.of(TransactionDate.of(LocalDate.of(2020, 4, 1)),
-        Amount.of(new BigDecimal("100.00")), OriginCurrency.of("EUR"), ClientId.of(1L));
+        Amount.of(new BigDecimal("100.00")), TransactionCurrency.of("EUR"), ClientId.of(1L));
 
     //when
     final TransactionCommission result = transactionService.propagateTransaction(transaction);
@@ -82,9 +81,9 @@ class TransactionServiceTest {
   void shouldPropagateTransactionWithHighTurnoverDiscount() throws DomainException {
     //given
     final Transaction transaction = Transaction.of(TransactionDate.of(LocalDate.of(2020, 4, 1)),
-        Amount.of(new BigDecimal("999.00")), OriginCurrency.of("EUR"), ClientId.of(1L));
+        Amount.of(new BigDecimal("999.00")), TransactionCurrency.of("EUR"), ClientId.of(1L));
     transactionRepository.save(transaction.getDate(), transaction.getAmount(),
-        ExchangeCurrency.of(Currency.getInstance("EUR")), transaction.getClientId());
+        TransactionCurrency.of("EUR"), transaction.getClientId());
 
     //when
     final TransactionCommission result = transactionService.propagateTransaction(transaction);

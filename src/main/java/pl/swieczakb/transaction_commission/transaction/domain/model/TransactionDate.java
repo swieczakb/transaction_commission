@@ -1,6 +1,7 @@
 package pl.swieczakb.transaction_commission.transaction.domain.model;
 
 import java.time.LocalDate;
+import pl.swieczakb.transaction_commission.transaction.domain.model.exception.ValidationException;
 
 public class TransactionDate {
 

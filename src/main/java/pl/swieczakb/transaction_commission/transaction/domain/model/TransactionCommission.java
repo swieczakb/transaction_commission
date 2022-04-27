@@ -5,16 +5,16 @@ import java.math.BigDecimal;
 
 public class TransactionCommission {
   private final Amount amount;
-  private final OriginCurrency currency;
+  private final TransactionCurrency currency;
 
   public TransactionCommission(
       Amount amount,
-      OriginCurrency currency) {
+      TransactionCurrency currency) {
     this.amount = amount;
     this.currency = currency;
   }
 
-  public static TransactionCommission of(BigDecimal amount, OriginCurrency currency) {
+  public static TransactionCommission of(BigDecimal amount, TransactionCurrency currency) {
     return new TransactionCommission(Amount.of(amount), currency);
   }
 

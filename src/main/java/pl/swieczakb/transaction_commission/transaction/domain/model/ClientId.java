@@ -1,5 +1,6 @@
 package pl.swieczakb.transaction_commission.transaction.domain.model;
 
+import pl.swieczakb.transaction_commission.transaction.domain.model.exception.ValidationException;
 import pl.swieczakb.transaction_commission.transaction.domain.port.ClientRepository;
 
 public class ClientId {
