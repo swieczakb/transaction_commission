@@ -18,6 +18,9 @@ import pl.swieczakb.transaction_commission.transaction.adapter.exchangerate.Fake
 import pl.swieczakb.transaction_commission.transaction.adapter.exchangerate.NewestExchangeRateResponse;
 import pl.swieczakb.transaction_commission.transaction.adapter.transactiondb.FakeTransactionRepository;
 import pl.swieczakb.transaction_commission.transaction.domain.CommissionCalculator;
+import pl.swieczakb.transaction_commission.transaction.domain.DefaultCommissionRule;
+import pl.swieczakb.transaction_commission.transaction.domain.HighTurnoverDiscountCommissionRule;
+import pl.swieczakb.transaction_commission.transaction.domain.SpecialClientDiscountCommissionRule;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Amount;
 import pl.swieczakb.transaction_commission.transaction.domain.model.ClientId;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Transaction;
@@ -43,7 +46,14 @@ class TransactionServiceTest {
             NewestExchangeRateResponse.class));
     this.clientRepository = new FakeClientService(
         List.of(new ClientEntity(1, false), new ClientEntity(42, true)));
-    this.commissionCalculator = new CommissionCalculator(transactionRepository, clientRepository);
+    final HighTurnoverDiscountCommissionRule chainOfRules = new HighTurnoverDiscountCommissionRule(
+        transactionRepository);
+    SpecialClientDiscountCommissionRule specialClientDiscountCommissionRule = new SpecialClientDiscountCommissionRule(clientRepository);
+    DefaultCommissionRule defaultCommissionRule = new DefaultCommissionRule();
+    chainOfRules.setNextRule(specialClientDiscountCommissionRule);
+    specialClientDiscountCommissionRule.setNextRule(defaultCommissionRule);
+    this.commissionCalculator = new CommissionCalculator(
+        chainOfRules);
     this.transactionService = new TransactionService(transactionRepository, exchangeRateService,
         commissionCalculator, clientRepository);
   }

@@ -13,9 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Amount;
 import pl.swieczakb.transaction_commission.transaction.domain.model.ClientId;
-import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Transaction;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCommission;
+import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionDate;
 import pl.swieczakb.transaction_commission.transaction.domain.port.ClientRepository;
 import pl.swieczakb.transaction_commission.transaction.domain.port.TransactionRepository;
@@ -33,7 +33,14 @@ class CommissionCalculatorTest {
 
   @BeforeEach
   void setUp() {
-    commissionCalculator = new CommissionCalculator(transactionRepository, clientService);
+    final HighTurnoverDiscountCommissionRule rootRule = new HighTurnoverDiscountCommissionRule(
+        transactionRepository);
+    SpecialClientDiscountCommissionRule specialClientDiscountCommissionRule = new SpecialClientDiscountCommissionRule(
+        clientService);
+    DefaultCommissionRule defaultCommissionRule = new DefaultCommissionRule();
+    rootRule.setNextRule(specialClientDiscountCommissionRule);
+    specialClientDiscountCommissionRule.setNextRule(defaultCommissionRule);
+    commissionCalculator = new CommissionCalculator(rootRule);
   }
 
   @Test
@@ -51,7 +58,8 @@ class CommissionCalculatorTest {
     final TransactionCommission result = commissionCalculator.calculate(givenTransaction);
 
     //then
-    assertThat(result.getAmount().getValue()).isEqualTo(BigDecimal.valueOf(2.50).setScale(2, RoundingMode.CEILING));
+    assertThat(result.getAmount().getValue()).isEqualTo(
+        BigDecimal.valueOf(2.50).setScale(2, RoundingMode.CEILING));
   }
 
   @Test

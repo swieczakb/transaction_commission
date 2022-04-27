@@ -11,6 +11,9 @@ import pl.swieczakb.transaction_commission.transaction.adapter.exchangerate.Exte
 import pl.swieczakb.transaction_commission.transaction.adapter.transactiondb.DatabaseTransactionService;
 import pl.swieczakb.transaction_commission.transaction.adapter.transactiondb.TransactionJpaRepository;
 import pl.swieczakb.transaction_commission.transaction.domain.CommissionCalculator;
+import pl.swieczakb.transaction_commission.transaction.domain.DefaultCommissionRule;
+import pl.swieczakb.transaction_commission.transaction.domain.HighTurnoverDiscountCommissionRule;
+import pl.swieczakb.transaction_commission.transaction.domain.SpecialClientDiscountCommissionRule;
 import pl.swieczakb.transaction_commission.transaction.domain.port.ClientRepository;
 import pl.swieczakb.transaction_commission.transaction.domain.port.ExchangeRateService;
 import pl.swieczakb.transaction_commission.transaction.domain.port.TransactionRepository;
@@ -38,7 +41,13 @@ public class LocalTransactionModule {
   @Bean
   public CommissionCalculator commissionCalculator(ClientRepository clientService,
       TransactionRepository transactionRepository) {
-    return new CommissionCalculator(transactionRepository, clientService);
+    final HighTurnoverDiscountCommissionRule rootRule = new HighTurnoverDiscountCommissionRule(
+        transactionRepository);
+    SpecialClientDiscountCommissionRule specialClientDiscountCommissionRule = new SpecialClientDiscountCommissionRule(clientService);
+    DefaultCommissionRule defaultCommissionRule = new DefaultCommissionRule();
+    rootRule.setNextRule(specialClientDiscountCommissionRule);
+    specialClientDiscountCommissionRule.setNextRule(defaultCommissionRule);
+    return new CommissionCalculator(rootRule);
   }
 
   @Bean

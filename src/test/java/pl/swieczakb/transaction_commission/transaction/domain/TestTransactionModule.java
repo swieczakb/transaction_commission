@@ -41,7 +41,14 @@ public class TestTransactionModule {
   @Bean
   public CommissionCalculator testCommissionCalculator(ClientRepository clientService,
       TransactionRepository transactionRepository) {
-    return new CommissionCalculator(transactionRepository, clientService);
+    final HighTurnoverDiscountCommissionRule rootRule = new HighTurnoverDiscountCommissionRule(
+        transactionRepository);
+    SpecialClientDiscountCommissionRule specialClientDiscountCommissionRule = new SpecialClientDiscountCommissionRule(
+        clientService);
+    DefaultCommissionRule defaultCommissionRule = new DefaultCommissionRule();
+    rootRule.setNextRule(specialClientDiscountCommissionRule);
+    specialClientDiscountCommissionRule.setNextRule(defaultCommissionRule);
+    return new CommissionCalculator(rootRule);
   }
 
   @Bean
