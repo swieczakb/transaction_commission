@@ -8,6 +8,7 @@ import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
+@EnableCaching
 public class Application {
 
   public static void main(String[] args) {
