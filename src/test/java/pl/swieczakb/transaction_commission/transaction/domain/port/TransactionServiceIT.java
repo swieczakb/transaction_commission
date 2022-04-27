@@ -11,20 +11,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
+import org.springframework.test.context.junit4.SpringRunner;
 import pl.swieczakb.transaction_commission.transaction.adapter.api.DomainException;
 import pl.swieczakb.transaction_commission.transaction.domain.TestTransactionModule;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Amount;
 import pl.swieczakb.transaction_commission.transaction.domain.model.ClientId;
-import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Transaction;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCommission;
+import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionDate;
 
-@SpringBootTest(classes = TestTransactionModule.class)
+@SpringBootTest
 public class TransactionServiceIT {
 
   @Value("classpath:data/transaction_test_scenario.csv")
@@ -44,7 +46,8 @@ public class TransactionServiceIT {
 
     for (TestScenario testScenario : scenarios) {
       //when
-      final TransactionCommission result = transactionService.propagateTransaction(testScenario.getTestTransaction());
+      final TransactionCommission result = transactionService.propagateTransaction(
+          testScenario.getTestTransaction());
 
       //then
       assertThat(result.getAmount()).isEqualTo(testScenario.getResult().getAmount());

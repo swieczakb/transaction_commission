@@ -34,7 +34,7 @@ public class FakeTransactionRepository implements
   @Override
   public boolean hasClientHighTurnoverDiscount(ClientId clientId, TransactionDate executionDate) {
     return mockDb.stream()
-        .filter(transactionEntity -> transactionEntity.getClientId() == clientId.getId())
+        .filter(transactionEntity -> transactionEntity.getClientId().equals(clientId.getId()))
         .filter(transactionEntity -> isTransactionThisMonth(executionDate, transactionEntity))
         .map(TransactionEntity::getAmount)
         .reduce(BigDecimal::add)

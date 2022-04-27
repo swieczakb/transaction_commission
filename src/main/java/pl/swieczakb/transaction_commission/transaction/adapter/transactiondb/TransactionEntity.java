@@ -2,21 +2,40 @@ package pl.swieczakb.transaction_commission.transaction.adapter.transactiondb;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Amount;
 import pl.swieczakb.transaction_commission.transaction.domain.model.ClientId;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Transaction;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionDate;
 
+@Entity
+@Table(name = "TRANSACTION")
 public class TransactionEntity {
 
-  private final BigDecimal amount;
+  @Id
+  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  private Long id;
 
-  private final String currency;
+  private BigDecimal amount;
 
-  private final LocalDate executionDate;
+  private String currency;
 
-  private final long clientId;
+  @Column(name = "execution_date")
+  private LocalDate executionDate;
+
+  //Here can be relation as foreign key to Client table
+  @Column(name = "client_id")
+  private Long clientId;
+
+  protected TransactionEntity() {
+  }
 
   public TransactionEntity(BigDecimal amount, String currency, LocalDate executionDate,
       long clientId) {
@@ -32,6 +51,10 @@ public class TransactionEntity {
         transactionDate.getDate(), clientId.getId());
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public BigDecimal getAmount() {
     return amount;
   }
@@ -44,7 +67,7 @@ public class TransactionEntity {
     return executionDate;
   }
 
-  public long getClientId() {
+  public Long getClientId() {
     return clientId;
   }
 

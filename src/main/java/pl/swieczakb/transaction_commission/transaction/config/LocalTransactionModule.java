@@ -8,7 +8,8 @@ import org.springframework.web.client.RestTemplate;
 import pl.swieczakb.transaction_commission.transaction.adapter.clientservice.FakeClientService;
 import pl.swieczakb.transaction_commission.transaction.adapter.exchangerate.ExchangeRateClient;
 import pl.swieczakb.transaction_commission.transaction.adapter.exchangerate.ExternalExchangeRateService;
-import pl.swieczakb.transaction_commission.transaction.adapter.transactiondb.FakeTransactionRepository;
+import pl.swieczakb.transaction_commission.transaction.adapter.transactiondb.DatabaseTransactionService;
+import pl.swieczakb.transaction_commission.transaction.adapter.transactiondb.TransactionJpaRepository;
 import pl.swieczakb.transaction_commission.transaction.domain.CommissionCalculator;
 import pl.swieczakb.transaction_commission.transaction.domain.port.ClientRepository;
 import pl.swieczakb.transaction_commission.transaction.domain.port.ExchangeRateService;
@@ -46,8 +47,8 @@ public class LocalTransactionModule {
   }
 
   @Bean
-  public TransactionRepository fakeTransactionRepository() {
-    return new FakeTransactionRepository();
+  public TransactionRepository transactionRepository(TransactionJpaRepository repository) {
+    return new DatabaseTransactionService(repository);
   }
 
   @Bean

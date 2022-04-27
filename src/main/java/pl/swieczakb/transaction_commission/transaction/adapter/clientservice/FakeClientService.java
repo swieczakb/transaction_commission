@@ -4,6 +4,9 @@ import java.util.List;
 import pl.swieczakb.transaction_commission.transaction.domain.model.ClientId;
 import pl.swieczakb.transaction_commission.transaction.domain.port.ClientRepository;
 
+/**
+ * Client is a separate domain and it should serve ports to be able to connect to this domain
+ */
 public class FakeClientService implements ClientRepository {
 
   private final List<ClientEntity> mockDb;
