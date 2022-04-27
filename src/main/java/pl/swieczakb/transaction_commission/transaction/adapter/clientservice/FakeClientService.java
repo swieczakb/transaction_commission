@@ -12,6 +12,11 @@ public class FakeClientService implements ClientRepository {
     this.mockDb = List.of(new ClientEntity(1, false), new ClientEntity(42, true));
   }
 
+  public FakeClientService(
+      List<ClientEntity> mockDb) {
+    this.mockDb = mockDb;
+  }
+
   @Override
   public boolean isSpecialClient(ClientId clientId) {
     return mockDb.stream()

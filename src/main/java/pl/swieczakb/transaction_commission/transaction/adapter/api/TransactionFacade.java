@@ -4,6 +4,7 @@ import io.vavr.control.Either;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import pl.swieczakb.transaction_commission.transaction.domain.model.Transaction;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCommission;
 import pl.swieczakb.transaction_commission.transaction.domain.port.TransactionService;
 
@@ -23,8 +24,9 @@ public class TransactionFacade {
       DelegateTransactionRequest request) {
     try {
       final TransactionCommission transactionCommission = transactionService.propagateTransaction(
-          request.getTransactionDate(),
-          request.getAmount(), request.getCurrency(), request.getClientId());
+          Transaction.of(
+              request.getTransactionDate(),
+              request.getAmount(), request.getCurrency(), request.getClientId()));
       return Either.right(DelegateTransactionResponse.of(transactionCommission));
     } catch (DomainException e) {
       LOG.error("Domain exception has been thrown",e);

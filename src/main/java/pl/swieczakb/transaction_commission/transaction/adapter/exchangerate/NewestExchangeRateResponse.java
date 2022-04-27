@@ -1,6 +1,7 @@
 package pl.swieczakb.transaction_commission.transaction.adapter.exchangerate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class NewestExchangeRateResponse {
 
   @JsonFormat(pattern = "yyyy-MM-dd")

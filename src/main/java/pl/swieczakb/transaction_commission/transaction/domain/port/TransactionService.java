@@ -3,12 +3,8 @@ package pl.swieczakb.transaction_commission.transaction.domain.port;
 import pl.swieczakb.transaction_commission.transaction.adapter.api.DomainException;
 import pl.swieczakb.transaction_commission.transaction.adapter.exchangerate.ExchangeResult;
 import pl.swieczakb.transaction_commission.transaction.domain.CommissionCalculator;
-import pl.swieczakb.transaction_commission.transaction.domain.model.Amount;
-import pl.swieczakb.transaction_commission.transaction.domain.model.ClientId;
-import pl.swieczakb.transaction_commission.transaction.domain.model.OriginCurrency;
 import pl.swieczakb.transaction_commission.transaction.domain.model.Transaction;
 import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionCommission;
-import pl.swieczakb.transaction_commission.transaction.domain.model.TransactionDate;
 
 public class TransactionService {
 
@@ -29,20 +25,16 @@ public class TransactionService {
   }
 
   public TransactionCommission propagateTransaction(
-      TransactionDate transactionDate,
-      Amount amount,
-      OriginCurrency currency,
-      ClientId clientId) throws DomainException {
-    transactionDate.validate();
-    amount.validate();
-    currency.validate();
-    clientId.validate(clientRepository);
-    final ExchangeResult exchangeResult = exchangeRateService.exchangeToEuro(amount.getValue(),
-        currency.getCurrency(), transactionDate.getDate());
-    final Transaction transaction = transactionRepository.save(transactionDate,
+      Transaction transaction) throws DomainException {
+    transaction.validate(clientRepository);
+    final ExchangeResult exchangeResult = exchangeRateService.exchangeToEuro(
+        transaction.getAmount().getValue(),
+        transaction.getCurrency().getCurrency(),
+        transaction.getDate().getDate());
+    final Transaction updatedTransaction = transactionRepository.save(transaction.getDate(),
         exchangeResult.getAmount(),
         exchangeResult.getCurrency(),
-        clientId);
-    return commissionCalculator.calculate(transaction);
+        transaction.getClientId());
+    return commissionCalculator.calculate(updatedTransaction);
   }
 }
