@@ -1,22 +1,28 @@
 # Getting Started
 
-### Reference Documentation
+RESTful API with an endpoint for transaction commission calculation. 
 
-For further reference, please consider the following sections:
+## How to run locally the application
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.6.7/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.6.7/maven-plugin/reference/html/#build-image)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/2.6.7/reference/htmlsingle/#boot-features-jpa-and-spring-data)
-* [Flyway Migration](https://docs.spring.io/spring-boot/docs/2.6.7/reference/htmlsingle/#howto-execute-flyway-database-migrations-on-startup)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.6.7/reference/htmlsingle/#boot-features-developing-web-applications)
+Please build application with command:
+````
+mvn clean install
+````
 
-### Guides
+and then in order to run the application please run following command:
+```
+java -jar transaction_commission-0.0.1-SNAPSHOT.jar   
+```
 
-The following guides illustrate how to use some features concretely:
+###Available resources
 
-* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
-
+```aidl
+curl --location --request POST 'localhost:8080/v1/transaction' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "date": "2022-04-25",
+    "amount": "400",
+    "currency": "EUR",
+    "client_id": 42
+}'
+```
