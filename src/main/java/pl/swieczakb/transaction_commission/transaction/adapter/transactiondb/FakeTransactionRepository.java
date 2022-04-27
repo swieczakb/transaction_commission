@@ -1,7 +1,6 @@
 package pl.swieczakb.transaction_commission.transaction.adapter.transactiondb;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,9 @@ public class FakeTransactionRepository implements
         .isPresent();
   }
 
-  private boolean isTransactionThisMonth(TransactionDate executionDate, TransactionEntity transactionEntity) {
-    return YearMonth.from(transactionEntity.getExecutionDate()).equals(YearMonth.from(executionDate.getDate()));
+  private boolean isTransactionThisMonth(TransactionDate executionDate,
+      TransactionEntity transactionEntity) {
+    return YearMonth.from(transactionEntity.getExecutionDate())
+        .equals(YearMonth.from(executionDate.getDate()));
   }
 }

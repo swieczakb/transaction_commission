@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Currency;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,6 +81,8 @@ class TransactionServiceTest {
     //given
     final Transaction transaction = Transaction.of(TransactionDate.of(LocalDate.of(2020, 4, 1)),
         Amount.of(new BigDecimal("999.00")), TransactionCurrency.of("EUR"), ClientId.of(1L));
+    transactionRepository.save(transaction.getDate(), transaction.getAmount(),
+        TransactionCurrency.of("EUR"), transaction.getClientId());
     transactionRepository.save(transaction.getDate(), transaction.getAmount(),
         TransactionCurrency.of("EUR"), transaction.getClientId());
 
